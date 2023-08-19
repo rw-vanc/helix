@@ -34,6 +34,5 @@ package.helix-tui.opt-level = 2
 package.helix-term.opt-level = 2
 
 [patch.crates-io]
-mio = { git = "https://gitlab.redox-os.org/redox-os/mio.git", branch = "redox-0.8.1" }
 crossterm = { git = "https://github.com/rw-vanc/crossterm.git", branch = "redox" }
 tokio = { git = "https://github.com/rw-vanc/tokio.git", branch = "helix-futex-bug" }
