@@ -38,9 +38,9 @@ use std::{collections::btree_map::Entry, io::stdin, path::Path, sync::Arc};
 use anyhow::{Context, Error};
 
 use crossterm::{event::Event as CrosstermEvent, tty::IsTty};
-#[cfg(not(windows))]
+#[cfg(not(any(windows, target_os = "redox")))]
 use {signal_hook::consts::signal, signal_hook_tokio::Signals};
-#[cfg(windows)]
+#[cfg(any(windows, target_os = "redox"))]
 type Signals = futures_util::stream::Empty<()>;
 
 #[cfg(not(feature = "integration"))]
@@ -226,9 +226,9 @@ impl Application {
 
         editor.set_theme(theme);
 
-        #[cfg(windows)]
+        #[cfg(any(windows, target_os = "redox"))]
         let signals = futures_util::stream::empty();
-        #[cfg(not(windows))]
+        #[cfg(not(any(windows, target_os = "redox")))]
         let signals = Signals::new([
             signal::SIGTSTP,
             signal::SIGCONT,
@@ -458,13 +458,13 @@ impl Application {
         }
     }
 
-    #[cfg(windows)]
+    #[cfg(any(windows, target_os = "redox"))]
     // no signal handling available on windows
     pub async fn handle_signals(&mut self, _signal: ()) -> bool {
         true
     }
 
-    #[cfg(not(windows))]
+    #[cfg(not(any(windows, target_os = "redox")))]
     pub async fn handle_signals(&mut self, signal: i32) -> bool {
         match signal {
             signal::SIGTSTP => {

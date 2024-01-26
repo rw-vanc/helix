@@ -5413,7 +5413,7 @@ fn shell_prompt(cx: &mut Context, prompt: Cow<'static, str>, behavior: ShellBeha
 }
 
 fn suspend(_cx: &mut Context) {
-    #[cfg(not(windows))]
+    #[cfg(not(any(windows, target_os = "redox")))]
     signal_hook::low_level::raise(signal_hook::consts::signal::SIGTSTP).unwrap();
 }
 
